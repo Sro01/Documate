@@ -24,14 +24,16 @@ function NavItem({ icon, label, hasDropdown = false, isActive = false, isCollaps
       title={isCollapsed ? label : undefined}
     >
       <span className="text-xl">{icon}</span>
-      {!isCollapsed && (
-        <>
-          <span className="flex-1 font-medium">{label}</span>
-          {hasDropdown && (
-            isOpen ? <ChevronDown size={18} className="text-blue-500" /> : <ChevronRight size={18} className="text-gray-400" />
-          )}
-        </>
-      )}
+      <div className={`flex items-center flex-1 transition-opacity duration-200 ${isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
+        {!isCollapsed && (
+          <>
+            <span className="flex-1 font-medium whitespace-nowrap">{label}</span>
+            {hasDropdown && (
+              isOpen ? <ChevronDown size={18} className="text-blue-500" /> : <ChevronRight size={18} className="text-gray-400" />
+            )}
+          </>
+        )}
+      </div>
     </button>
   );
 }

@@ -6,13 +6,17 @@ import Dropdown from '../common/Dropdown';
 import NavItem from './NavItem';
 import SubMenuItem from './SubMenuItem';
 
-function Sidebar() {
+interface SidebarProps {
+  isCollapsed: boolean;
+  setIsCollapsed: (value: boolean) => void;
+}
+
+function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   const [isLoggedIn] = useState(true);
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const navigate = useNavigate();
 
   return (
-    <aside className={`h-screen bg-[#e9eef6] border-r border-gray-200 p-4 flex flex-col transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
+    <aside className={`fixed left-0 top-0 h-screen bg-[#e9eef6] border-r border-gray-200 p-4 flex flex-col transition-all duration-300 overflow-hidden ${isCollapsed ? 'w-20' : 'w-64'}`}>
       <div className="flex mb-6">
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -23,16 +27,14 @@ function Sidebar() {
         </button>
       </div>
 
-      {!isCollapsed && (
-        <ProfileCard
-          userName="김길동"
-          isLoggedIn={isLoggedIn}
-          onLogin={() => console.log('로그인')}
-          onRegister={() => console.log('회원가입')}
-          onPasswordChange={() => console.log('비밀번호 변경')}
-          onSettings={() => console.log('설정')}
-        />
-      )}
+      <div className={`transition-opacity duration-300 ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        {!isCollapsed && (
+          <ProfileCard
+            userName="김길동"
+            isLoggedIn={isLoggedIn}
+          />
+        )}
+      </div>
 
       <nav className="mt-4 flex-1">
         <Dropdown
@@ -45,8 +47,8 @@ function Sidebar() {
             />
           }
         >
-          <SubMenuItem label="챗봇 목록 보기" onClick={() => navigate('/chatbotlist')} />
-          <SubMenuItem label="챗봇 생성" onClick={() => navigate('/chatbot/create')} />
+          <SubMenuItem label="챗봇 목록 보기" onClick={() => navigate('/admin/chatbotlist')} />
+          <SubMenuItem label="챗봇 생성" onClick={() => navigate('/admin/chatbot/create')} />
         </Dropdown>
 
         <Dropdown
@@ -67,14 +69,15 @@ function Sidebar() {
           isCollapsed={isCollapsed}
           trigger={
             <NavItem
-              icon="⚙️"
-              label="설정"
-              hasDropdown={true}
+            icon="⚙️"
+            label="설정"
+            hasDropdown={true}
             />
           }
         >
+          <SubMenuItem label="가입 신청 관리" onClick={() => navigate('/admin/signup-management')} />
+          <SubMenuItem label="관리자 목록" />
           <SubMenuItem label="일반 설정" />
-          <SubMenuItem label="알림 설정" />
         </Dropdown>
       </nav>
     </aside>

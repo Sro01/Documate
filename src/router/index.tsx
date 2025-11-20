@@ -3,9 +3,11 @@ import PublicLayout from '../layouts/PublicLayout';
 import ProtectedLayout from '../layouts/ProtectedLayout';
 import NotFoundPage from '../pages/error/NotFoundPage';
 import LoginPage from '../pages/auth/LoginPage';
-import RegisterPage from '../pages/auth/RegisterPage';
+import SignupPage from '../pages/auth/SignupPage';
 import ChatbotListPage from '../pages/admin/chatbot/ChatbotListPage';
 import ChatbotCreatePage from '../pages/admin/chatbot/ChatbotCreatePage';
+import ManualPage from '../pages/admin/chatbot/ManualPage';
+import SignupManagementPage from '../pages/admin/signup/SignupManagementPage';
 import SettingsPage from '../pages/admin/settings/SettingsPage';
 
 // Public Routes: 인증이 필요 없는 라우트
@@ -19,8 +21,8 @@ export const publicRoutes: RouteObject[] = [
         element: <LoginPage />,
       },
       {
-        path: "register",
-        element: <RegisterPage />,
+        path: "signup",
+        element: <SignupPage />,
       },
     ],
   },
@@ -29,7 +31,7 @@ export const publicRoutes: RouteObject[] = [
 // Protected Routes: 인증이 필요한 라우트
 export const protectedRoutes: RouteObject[] = [
   {
-    path: "/",
+    path: "/admin",
     element: <ProtectedLayout />,
     errorElement: <NotFoundPage />,
     children: [
@@ -44,7 +46,15 @@ export const protectedRoutes: RouteObject[] = [
             path: "create",
             element: <ChatbotCreatePage />,
           },
+          {
+            path: ":chatbotId/manual",
+            element: <ManualPage />,
+          },
         ],
+      },
+      {
+        path: "signup-management",
+        element: <SignupManagementPage />,
       },
       {
         path: "settings",

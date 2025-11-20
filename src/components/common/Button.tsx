@@ -4,23 +4,23 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'medium' | 'large';
 }
 
-function Button({ children, variant = 'primary', size = 'medium', className = '', ...props }: ButtonProps) {
+function Button({ children, variant, size = 'medium', className = '', ...props }: ButtonProps) {
   let baseClasses = "font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md";
   let variantClasses = "";
   let sizeClasses = "";
 
   switch (variant) {
     case 'primary':
-      variantClasses = "bg-[#e9eef6] hover:bg-gray-300 text-black cursor-pointer";
+      variantClasses = "bg-blue-300 hover:bg-blue-400 text-black cursor-pointer";
       break;
     case 'secondary':
-      variantClasses = "bg-[#e9eef6] hover:bg-gray-300 text-black cursor-pointer";
+      variantClasses = "bg-gray-300 hover:bg-gray-400 text-black cursor-pointer";
       break;
     case 'outline':
-      variantClasses = "border-2 border-blue-400 text-blue-500 hover:bg-gray-50 cursor-pointer";
+      variantClasses = "border-2 border-blue-400 text-blue-500 hover:bg-gray-100 cursor-pointer";
       break;
     case 'white':
-      variantClasses = "bg-[#e9eef6] hover:bg-gray-300 text-black cursor-pointer";
+      variantClasses = "bg-white hover:bg-gray-300 text-black cursor-pointer";
       break;
     default:
       variantClasses = "bg-[#e9eef6] hover:bg-gray-300 text-black cursor-pointer";

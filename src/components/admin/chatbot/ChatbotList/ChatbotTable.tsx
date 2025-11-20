@@ -6,29 +6,34 @@ interface ChatbotTableProps {
   onAddManual?: (chatbotId: string) => void;
   onEditManual?: (chatbotId: string) => void;
   onDeleteManual?: (chatbotId: string) => void;
+  onTogglePublic?: (chatbotId: string, isPublic: boolean) => void;
 }
 
 function ChatbotTable({
   chatbots,
   onAddManual,
   onEditManual,
-  onDeleteManual
+  onDeleteManual,
+  onTogglePublic
 }: ChatbotTableProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <table className="w-full">
-        <thead className="bg-gradient-to-r from-blue-50 to-blue-100">
+      <table className="w-full table-fixed">
+        <thead className="bg-gradient-to-r from-blue-100 to-blue-200">
           <tr>
-            <th className="px-6 py-4 text-center font-bold text-black-700">
+            <th className="px-6 py-4 text-center font-bold text-black-700 w-20">
               ID
             </th>
-            <th className="px-6 py-4 text-center font-bold text-black-700">
+            <th className="px-6 py-4 text-center font-bold text-black-700 w-48">
               챗봇 명칭
             </th>
-            <th className="px-6 py-4 text-center font-bold text-black-700">
-              매뉴얼
+            <th className="px-6 py-4 text-center font-bold text-black-700 w-32">
+              태그
             </th>
             <th className="px-6 py-4 text-center font-bold text-black-700">
+              설명
+            </th>
+            <th className="px-6 py-4 text-center font-bold text-black-700 w-40">
               상태
             </th>
           </tr>
@@ -49,6 +54,7 @@ function ChatbotTable({
                 onAddManual={onAddManual}
                 onEditManual={onEditManual}
                 onDeleteManual={onDeleteManual}
+                onTogglePublic={onTogglePublic}
               />
             ))
           )}

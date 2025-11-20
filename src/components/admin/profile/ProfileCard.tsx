@@ -1,22 +1,35 @@
+import { useNavigate } from 'react-router-dom';
 import Button from '../../common/Button';
 
 interface ProfileCardProps {
   userName?: string;
   isLoggedIn?: boolean;
-  onLogin?: () => void;
-  onRegister?: () => void;
-  onPasswordChange?: () => void;
-  onSettings?: () => void;
 }
 
 function ProfileCard({
   userName = "김갑동",
   isLoggedIn = false,
-  onLogin,
-  onRegister,
-  onPasswordChange,
-  onSettings
 }: ProfileCardProps) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // TODO: API 호출 (POST /api/auth/logout) 또는 토큰 삭제
+    // TODO: 로그인 상태 전역 관리 (Context/Store)에서 로그아웃 처리
+    console.log('로그아웃');
+    navigate('/login');
+  };
+
+  const handleSettings = () => {
+    navigate('/admin/settings');
+  };
+
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  const handleRegister = () => {
+    navigate('/signup');
+  };
   return (
     <div className="bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg p-6 text-white">
       {isLoggedIn ? (
@@ -27,16 +40,16 @@ function ProfileCard({
             <Button
               variant="white"
               size="small"
-              onClick={onPasswordChange}
+              onClick={handleSettings}
             >
-              비밀번호 변경
+              설정
             </Button>
             <Button
               variant="white"
               size="small"
-              onClick={onSettings}
+              onClick={handleLogout}
             >
-              설정
+              로그아웃
             </Button>
           </div>
         </>
@@ -48,14 +61,14 @@ function ProfileCard({
             <Button
               variant="white"
               size="small"
-              onClick={onLogin}
+              onClick={handleLogin}
             >
               로그인
             </Button>
             <Button
               variant="white"
               size="small"
-              onClick={onRegister}
+              onClick={handleRegister}
             >
               회원가입
             </Button>
