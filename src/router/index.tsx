@@ -9,6 +9,7 @@ import ChatbotCreatePage from '../pages/admin/chatbot/ChatbotCreatePage';
 import ManualPage from '../pages/admin/chatbot/ManualPage';
 import SignupManagementPage from '../pages/admin/signup/SignupManagementPage';
 import SettingsPage from '../pages/admin/settings/SettingsPage';
+import ChatPage from '../pages/chat/ChatPage';
 
 // Public Routes: 인증이 필요 없는 라우트
 export const publicRoutes: RouteObject[] = [
@@ -16,6 +17,10 @@ export const publicRoutes: RouteObject[] = [
     path: "/",
     element: <PublicLayout />,
     children: [
+      {
+        index: true,
+        element: <ChatPage />,
+      },
       {
         path: "login",
         element: <LoginPage />,

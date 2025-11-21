@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import Sidebar from '../components/layout/Sidebar';
+import AdminSidebarContent from '../components/layout/AdminSidebarContent';
 import Header from '../components/layout/Header';
 
 interface ProtectedLayoutProps {
@@ -15,8 +16,10 @@ function ProtectedLayout({ isAuthenticated = true }: ProtectedLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+    <div className="h-screen bg-white overflow-hidden">
+      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed}>
+        <AdminSidebarContent isCollapsed={isCollapsed} />
+      </Sidebar>
       <div className={`flex flex-col transition-all duration-300 ${isCollapsed ? 'ml-20' : 'ml-64'}`}>
         <Header />
         <Outlet />
