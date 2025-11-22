@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, ChevronDown } from 'lucide-react';
 import type { Chatbot } from '../../types/admin/chatbot';
+import { dummyChatbots } from '../../utils/dummyData';
 
 interface ChatInputProps {
   onSendMessage: (message: string, chatbotId: string) => void;
@@ -9,12 +10,11 @@ interface ChatInputProps {
 
 function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   const [message, setMessage] = useState('');
-  const [selectedChatbot, setSelectedChatbot] = useState<Chatbot | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // TODO: 나중에 커스텀 Hook으로 분리 예정 (예: usePublicChatbots)
-  const [publicChatbots] = useState<Chatbot[]>([]);
+  const [chatbots] = useState<Chatbot[]>(dummyChatbots);
+  const [selectedChatbot, setSelectedChatbot] = useState<Chatbot | null>(dummyChatbots[0]);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -72,12 +72,12 @@ function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
 
               {isDropdownOpen && (
                 <div className="absolute bottom-full left-0 mb-2 w-64 bg-white border border-gray-300 rounded-2xl shadow-lg max-h-60 overflow-y-auto z-10">
-                  {publicChatbots.length === 0 ? (
+                  {chatbots.length === 0 ? (
                     <div className="px-4 py-3 text-sm text-gray-400 text-center">
                       사용 가능한 챗봇이 없습니다
                     </div>
                   ) : (
-                    publicChatbots.map((chatbot) => (
+                    chatbots.map((chatbot) => (
                       <button
                         key={chatbot.chatbot_id}
                         onClick={() => {

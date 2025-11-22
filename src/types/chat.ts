@@ -42,6 +42,8 @@ export interface ChatHistory {
   session_id: string;
   title: string;
   messages: Message[];
+  chatbot_id: string;
   created_at: Date;
   updated_at: Date;
+  isPinned?: boolean;
 }
