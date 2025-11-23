@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 interface ResultBoxProps {
   type: 'success' | 'info' | 'warning';

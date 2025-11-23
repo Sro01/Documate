@@ -1,10 +1,4 @@
 import { useState } from 'react';
-import type {
-  FindUsernameRequest,
-  FindUsernameResponseData,
-  ResetPasswordRequest,
-  ResetPasswordResponseData,
-} from '../../types/auth/auth';
 
 /**
  * 아이디 찾기 훅
@@ -14,7 +8,7 @@ export const useFindUsername = () => {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<string[] | null>(null);
 
-  const findUsername = async (name: string) => {
+  const findUsername = async (_name: string) => {
     setIsLoading(true);
     setError(null);
     setResult(null);
@@ -71,7 +65,7 @@ export const useResetPassword = () => {
   const [error, setError] = useState<string | null>(null);
   const [tempPassword, setTempPassword] = useState<string | null>(null);
 
-  const resetPassword = async (username: string, name: string) => {
+  const resetPassword = async (_username: string, _name: string) => {
     setIsLoading(true);
     setError(null);
     setTempPassword(null);
