@@ -20,35 +20,28 @@ export function useChatMessages({ sessionId, onMessagesChange }: UseChatMessages
 
   // localStorage에서 메시지를 로드하는 함수
   const loadMessages = useCallback(() => {
-    console.log('useChatMessages - 메시지 로드 시도:', sessionId);
     if (sessionId) {
       const session = getChatHistory(sessionId);
-      console.log('useChatMessages - 로드된 세션:', session);
       if (session) {
-        console.log('useChatMessages - 메시지 개수:', session.messages.length);
         setMessages(session.messages);
       } else {
         console.log('useChatMessages - 세션을 찾을 수 없음');
         setMessages([]);
       }
     } else {
-      console.log('useChatMessages - sessionId가 null');
       setMessages([]);
     }
   }, [sessionId]);
 
   // 세션이 변경되면 해당 세션의 메시지 로드
   useEffect(() => {
-    console.log('useChatMessages - sessionId 변경됨:', sessionId);
     loadMessages();
   }, [sessionId, loadMessages]);
 
   // localStorage 변경 감지 (다른 컴포넌트에서 직접 추가한 메시지 반영)
   useEffect(() => {
     const handleStorageChange = (e: CustomEvent<{ sessionId: string }>) => {
-      console.log('useChatMessages - storage 변경 이벤트 수신:', e.detail);
       if (e.detail.sessionId === sessionId) {
-        console.log('useChatMessages - 현재 세션의 변경사항 감지, 메시지 재로드');
         loadMessages();
       }
     };
@@ -78,7 +71,9 @@ export function useChatMessages({ sessionId, onMessagesChange }: UseChatMessages
    * 사용자 메시지 전송 (로컬에만 저장)
    */
   const sendUserMessage = useCallback((content: string) => {
-    if (!sessionId || !content.trim()) return;
+    if (!sessionId || !content.trim()) {
+      return;
+    }
 
     const userMessage: Message = {
       role: 'user',

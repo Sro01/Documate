@@ -43,8 +43,6 @@ function ChatPage() {
   } = useChatMessages({ sessionId: currentSessionId, onMessagesChange: refreshChatHistories });
 
   const handleSendMessage = async (message: string, chatbotId: string) => {
-    console.log('메시지 전송:', message, '챗봇 ID:', chatbotId);
-
     // 세션이 없으면 새 채팅 생성
     if (!currentSessionId) {
       const newSession = createNewChat(chatbotId);

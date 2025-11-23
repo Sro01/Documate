@@ -65,10 +65,13 @@ export function addMessageToSession(
   sessionId: string,
   message: Message
 ): ChatHistory | null {
+
   const histories = getAllChatHistories();
   const sessionIndex = histories.findIndex(h => h.session_id === sessionId);
 
-  if (sessionIndex === -1) return null;
+  if (sessionIndex === -1) {
+    return null;
+  }
 
   const session = histories[sessionIndex];
   session.messages.push(message);
@@ -150,7 +153,6 @@ function saveAllChatHistories(histories: ChatHistory[]): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(histories));
   } catch (error) {
-    console.error('채팅 기록 저장 실패:', error);
   }
 }
 
