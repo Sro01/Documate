@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useChatContext } from '../../contexts/ChatContext';
 import { useChatMessages } from '../../hooks/chat/useChatMessages';
@@ -16,6 +16,7 @@ function ChatPage() {
   const navigate = useNavigate();
   const { currentSessionId, createNewChat, selectChat, clearCurrentSession, refreshChatHistories } = useChatContext();
   const { postUserMessage } = usePostUserMessage();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // URL의 sessionId와 현재 선택된 세션 동기화
   useEffect(() => {
@@ -41,6 +42,11 @@ function ChatPage() {
     isLoading,
     setIsLoading,
   } = useChatMessages({ sessionId: currentSessionId, onMessagesChange: refreshChatHistories });
+
+  // 메시지가 추가될 때마다 스크롤을 맨 아래로 이동
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
 
   const handleSendMessage = async (message: string, chatbotId: string) => {
     // 세션이 없으면 새 채팅 생성
@@ -117,6 +123,8 @@ function ChatPage() {
                   chatbotName="DoQ-Mate"
                 />
               )}
+              {/* 스크롤 타겟 */}
+              <div ref={messagesEndRef} />
             </div>
           </div>
           <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
