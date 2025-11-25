@@ -3,6 +3,7 @@
  */
 
 import type { Chatbot } from '../types/admin/chatbot';
+import type { Admin } from '../types/auth/auth';
 
 // 더미 챗봇 데이터
 export const dummyChatbots: Chatbot[] = [
@@ -12,6 +13,28 @@ export const dummyChatbots: Chatbot[] = [
     description: '로컬푸드 관련 정보를 제공하는 챗봇',
     is_public: true,
     created_at: new Date().toISOString(),
+  },
+];
+
+// 더미 관리자 데이터
+export const dummyAdmins: Admin[] = [
+  {
+    admin_id: 'admin_0001',
+    username: 'admin1',
+    name: '김관리',
+    created_at: '2024-01-15T10:30:00Z',
+  },
+  {
+    admin_id: 'admin_0002',
+    username: 'admin2',
+    name: '이관리',
+    created_at: '2024-02-20T14:20:00Z',
+  },
+  {
+    admin_id: 'admin_0003',
+    username: 'admin3',
+    name: '박관리',
+    created_at: '2024-03-10T09:15:00Z',
   },
 ];
 

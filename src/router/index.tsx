@@ -7,10 +7,11 @@ import SignupPage from '../pages/auth/SignupPage';
 import FindUsernamePage from '../pages/auth/FindUsernamePage';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
 import AdminMainPage from '../pages/admin/AdminMainPage';
+import AdminListPage from '../pages/admin/settings/AdminListPage';
 import ChatbotListPage from '../pages/admin/chatbot/ChatbotListPage';
 import ChatbotCreatePage from '../pages/admin/chatbot/ChatbotCreatePage';
 import ManualPage from '../pages/admin/chatbot/ManualPage';
-import SignupManagementPage from '../pages/admin/signup/SignupManagementPage';
+import SignupManagementPage from '../pages/admin/settings/SignupManagementPage';
 import SettingsPage from '../pages/admin/settings/SettingsPage';
 import ChatPage from '../pages/chat/ChatPage';
 
@@ -84,6 +85,10 @@ export const protectedRoutes: RouteObject[] = [
       {
         path: "signup-management",
         element: <SignupManagementPage />,
+      },
+      {
+        path: "admins",
+        element: <AdminListPage />,
       },
       {
         path: "settings",

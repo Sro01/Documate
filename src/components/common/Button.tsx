@@ -1,6 +1,6 @@
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'outline' | 'white';
+  variant?: 'primary' | 'secondary' | 'outline' | 'white' | 'red';
   size?: 'small' | 'medium' | 'large';
 }
 
@@ -26,6 +26,9 @@ function Button({ children, variant, size = 'medium', className = '', ...props }
       break;
     case 'white':
       variantClasses = "bg-white hover:bg-gray-300 text-black cursor-pointer";
+      break;
+    case 'red':
+      variantClasses = "bg-red-400 hover:bg-red-500 text-white cursor-pointer";
       break;
     default:
       variantClasses = "bg-[#e9eef6] hover:bg-gray-300 text-black cursor-pointer";
