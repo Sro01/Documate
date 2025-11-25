@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAccessToken, clearAuthData } from '../utils/authStorage';
+import { getAccessToken, getAdminId, clearAuthData } from '../utils/authStorage';
 
 const API_BASE_URL = '/api';
 
@@ -18,6 +18,13 @@ apiClient.interceptors.request.use(
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+
+    // 임시: 백엔드가 JWT를 완전히 지원할 때까지 X-Test-Admin-ID 헤더 추가
+    const adminId = getAdminId();
+    if (adminId) {
+      config.headers['X-Test-Admin-ID'] = adminId;
+    }
+
     return config;
   },
   (error) => {

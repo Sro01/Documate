@@ -6,14 +6,13 @@ import PasswordInput from '../../components/common/PasswordInput';
 import TextLink from '../../components/common/TextLink';
 import AuthPageLayout from '../../layouts/AuthPageLayout';
 import { ROUTES } from '../../constants/routes';
-import { useLogin, useGetMe } from '../../hooks/auth/useAuth';
+import { useLogin } from '../../hooks/auth/useAuth';
 import { setAccessToken, setAdminId } from '../../utils/authStorage';
 
 function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isLoading: isLoginLoading } = useLogin();
-  const { getMe } = useGetMe();
 
   const [formData, setFormData] = useState({
     username: '',
@@ -72,14 +71,9 @@ function LoginPage() {
         return;
       }
 
-      // 액세스 토큰 저장
-      setAccessToken(loginResult.access_token);
-
-      // 사용자 정보 조회 후 admin_id 저장
-      const userInfo = await getMe();
-      if (userInfo) {
-        setAdminId(userInfo.admin_id);
-      }
+      // 액세스 토큰 및 관리자 정보 저장
+      setAccessToken(loginResult.token);
+      setAdminId(loginResult.admin.admin_id);
 
       // 이전 페이지로 리다이렉트 또는 기본 admin 페이지로 이동
       const from = location.state?.from?.pathname || ROUTES.ADMIN.CHATBOT_LIST;

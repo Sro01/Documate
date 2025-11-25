@@ -20,8 +20,8 @@ function AdminListPage() {
 
   const loadAdmins = async () => {
     const data = await getAdmins();
-    if (data) {
-      setAdmins(data);
+    if (data && data.admins) {
+      setAdmins(data.admins);
     }
   };
 

@@ -6,9 +6,13 @@ import PasswordInput from '../../components/common/PasswordInput';
 import TextLink from '../../components/common/TextLink';
 import AuthPageLayout from '../../layouts/AuthPageLayout';
 import { ROUTES } from '../../constants/routes';
+import { useCreateSignup, useCheckUsername } from '../../hooks/signup/useSignup';
 
 function SignupPage() {
   const navigate = useNavigate();
+  const { checkUsername, isLoading: isCheckingUsername } = useCheckUsername();
+  const { createSignup, isLoading: isSubmitting } = useCreateSignup();
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -17,9 +21,7 @@ function SignupPage() {
   });
   const [isUsernameChecked, setIsUsernameChecked] = useState(false);
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -61,22 +63,19 @@ function SignupPage() {
       return;
     }
 
-    setIsCheckingUsername(true);
+    const result = await checkUsername(formData.username);
 
-    try {
-      // TODO: API 호출 (GET /api/signup/check-username?username={username})
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const available = formData.username.length >= 3;
-      setIsUsernameAvailable(available);
+    if (result) {
+      setIsUsernameAvailable(result.is_available);
       setIsUsernameChecked(true);
 
-      if (!available) {
+      if (!result.is_available) {
         setErrors(prev => ({ ...prev, username: '이미 사용 중인 아이디입니다' }));
+      } else {
+        setErrors(prev => ({ ...prev, username: '' }));
       }
-    } catch (error) {
+    } else {
       setErrors(prev => ({ ...prev, username: '중복 확인에 실패했습니다' }));
-    } finally {
-      setIsCheckingUsername(false);
     }
   };
 
@@ -118,18 +117,17 @@ function SignupPage() {
       return;
     }
 
-    setIsSubmitting(true);
+    const result = await createSignup({
+      username: formData.username,
+      password: formData.password,
+      name: formData.name,
+    });
 
-    try {
-      // TODO: API 호출 (POST /api/signup)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
+    if (result) {
       alert('가입 신청이 완료되었습니다.\n관리자 승인 후 로그인이 가능합니다.');
       navigate(ROUTES.AUTH.LOGIN);
-    } catch (error) {
+    } else {
       alert('가입 신청에 실패했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 

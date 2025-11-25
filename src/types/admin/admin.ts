@@ -9,8 +9,9 @@ import type { Admin } from '../auth/auth';
 // 관리자 계정 목록 조회 (GET /api/admin)
 // ============================================
 
-// API는 Admin 배열을 직접 반환
-export type AdminListResponseData = Admin[];
+export interface AdminListResponseData {
+  admins: Admin[];
+}
 
 // ============================================
 // 관리자 계정 상세 조회 (GET /api/admin/{admin_id})

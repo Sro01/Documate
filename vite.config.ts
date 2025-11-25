@@ -8,8 +8,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://210.117.134.83:11202',
+        target: 'https://210.117.134.83.nip.io:11202',
         changeOrigin: true,
+        secure: false,
       },
     },
   },

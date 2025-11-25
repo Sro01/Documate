@@ -39,17 +39,17 @@ export interface SignupResponseData {
 // ============================================
 
 export interface CheckUsernameResponseData {
-  available: boolean;
+  username: string;
+  is_available: boolean;
+  message: string;
 }
 
 // ============================================
 // 가입 신청 목록 조회 (GET /api/signup)
 // ============================================
 
-export interface SignupListResponseData {
-  signups: Signup[];
-  total?: number;
-}
+// API는 Signup 배열을 직접 반환
+export type SignupListResponseData = Signup[];
 
 // ============================================
 // 가입 신청 상세 조회 (GET /api/signup/{signup_id})

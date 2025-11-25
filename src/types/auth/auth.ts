@@ -28,8 +28,13 @@ export interface LoginRequest {
 }
 
 export interface LoginResponseData {
-  access_token: string;
-  token_type: string; // "Bearer"
+  token: string;
+  admin: {
+    admin_id: string;
+    username: string;
+    name: string;
+    created_at: string;
+  };
 }
 
 // ============================================
