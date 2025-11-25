@@ -65,7 +65,7 @@ function AdminSidebarContent({ isCollapsed }: AdminSidebarContentProps) {
           }
         >
           <SubMenuItem label="가입 신청 관리" onClick={() => navigate(ROUTES.ADMIN.SIGNUP_MANAGEMENT)} />
-          <SubMenuItem label="관리자 목록" />
+          <SubMenuItem label="관리자 목록" onClick={() => navigate(ROUTES.ADMIN.ADMIN_LIST)}/>
           <SubMenuItem label="프로필 설정" onClick={() => navigate(ROUTES.ADMIN.SETTINGS)} />
         </Dropdown>
       </nav>

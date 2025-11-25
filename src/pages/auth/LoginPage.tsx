@@ -12,7 +12,7 @@ import { setAccessToken, setAdminId } from '../../utils/authStorage';
 function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isLoading: isLoginLoading, error: loginError } = useLogin();
+  const { login, isLoading: isLoginLoading } = useLogin();
   const { getMe } = useGetMe();
 
   const [formData, setFormData] = useState({

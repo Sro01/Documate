@@ -28,6 +28,6 @@ export const ROUTES = {
     CHATBOT_MANUAL: (chatbotId: string) => `/admin/chatbot/${chatbotId}/manual`,
     SIGNUP_MANAGEMENT: '/admin/signup-management',
     ADMIN_LIST: '/admin/admins',
-    SETTINGS: '/admin/settings',
+    SETTINGS: '/admin/profile-settings',
   },
 } as const;

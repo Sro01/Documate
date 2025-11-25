@@ -40,6 +40,8 @@ export interface MeResponseData {
   admin_id: string;
   username: string;
   name: string;
+  created_at?: string;
+  last_login_at?: string;
 }
 
 // ============================================

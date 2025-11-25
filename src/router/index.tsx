@@ -12,7 +12,7 @@ import ChatbotListPage from '../pages/admin/chatbot/ChatbotListPage';
 import ChatbotCreatePage from '../pages/admin/chatbot/ChatbotCreatePage';
 import ManualPage from '../pages/admin/chatbot/ManualPage';
 import SignupManagementPage from '../pages/admin/settings/SignupManagementPage';
-import SettingsPage from '../pages/admin/settings/SettingsPage';
+import ProfileSettingsPage from '../pages/admin/settings/ProfileSettingsPage';
 import ChatPage from '../pages/chat/ChatPage';
 
 // Public Routes: 인증이 필요 없는 라우트
@@ -91,8 +91,8 @@ export const protectedRoutes: RouteObject[] = [
         element: <AdminListPage />,
       },
       {
-        path: "settings",
-        element: <SettingsPage />,
+        path: "profile-settings",
+        element: <ProfileSettingsPage />,
       },
     ],
   },
