@@ -1,62 +1,63 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Signup } from '../../../types/auth/signup';
 import Button from '../../../components/common/Button';
 import PageHeader from '../../../components/common/PageHeader';
 import ConfirmModal from '../../../components/common/ConfirmModal';
+import { useGetSignups, useApproveSignup, useRejectSignup } from '../../../hooks/signup/useSignup';
 
 function SignupManagementPage() {
-  // TODO: API로 가입 신청 목록 가져오기 (GET /api/signup)
-  const [signups, setSignups] = useState<Signup[]>([
-    {
-      signup_id: 'signup_0001',
-      username: 'testuser1',
-      name: '김테스트',
-      created_at: '2025-01-15T10:30:00Z',
-    },
-    {
-      signup_id: 'signup_0002',
-      username: 'testuser2',
-      name: '이테스트',
-      created_at: '2025-01-16T14:20:00Z',
-    },
-  ]);
-
+  const [signups, setSignups] = useState<Signup[]>([]);
   const [selectedSignup, setSelectedSignup] = useState<Signup | null>(null);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
 
+  const { getSignups, isLoading: isLoadingList } = useGetSignups();
+  const { approveSignup, isLoading: isApproving } = useApproveSignup();
+  const { rejectSignup, isLoading: isRejecting } = useRejectSignup();
+
+  useEffect(() => {
+    loadSignups();
+  }, []);
+
+  const loadSignups = async () => {
+    const data = await getSignups();
+    if (data && data.signups) {
+      setSignups(data.signups);
+    } else {
+      setSignups([]);
+    }
+  };
+
   const handleApprove = async () => {
     if (!selectedSignup) return;
 
-    try {
-      // TODO: API 호출 (POST /api/signup/{signup_id}/approve)
-      await new Promise(resolve => setTimeout(resolve, 500));
+    const success = await approveSignup(selectedSignup.signup_id);
 
-      setSignups(prev => prev.filter(s => s.signup_id !== selectedSignup.signup_id));
+    if (success) {
       alert(`${selectedSignup.name}님의 가입이 승인되었습니다.`);
-    } catch (error) {
-      alert('승인에 실패했습니다.');
-    } finally {
-      setShowApproveModal(false);
-      setSelectedSignup(null);
+      await loadSignups();
+    } else {
+      alert('가입 승인에 실패했습니다.');
     }
+
+    setShowApproveModal(false);
+    setSelectedSignup(null);
   };
 
   const handleReject = async () => {
     if (!selectedSignup) return;
 
-    try {
-      // TODO: API 호출 (POST /api/signup/{signup_id}/reject)
-      await new Promise(resolve => setTimeout(resolve, 500));
+    const success = await rejectSignup(selectedSignup.signup_id);
 
-      setSignups(prev => prev.filter(s => s.signup_id !== selectedSignup.signup_id));
+    if (success) {
       alert(`${selectedSignup.name}님의 가입 신청이 반려되었습니다.`);
-    } catch (error) {
-      alert('반려에 실패했습니다.');
-    } finally {
-      setShowRejectModal(false);
-      setSelectedSignup(null);
+      await loadSignups();
+    } else {
+      alert('가입 반려에 실패했습니다.');
     }
+
+    setShowRejectModal(false);
+    setSelectedSignup(null);
   };
 
   const formatDate = (dateString: string) => {
@@ -75,7 +76,11 @@ function SignupManagementPage() {
       <main className="flex-1 p-8">
         <PageHeader title="가입 신청 관리" />
 
-        {signups.length === 0 ? (
+        {isLoadingList ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+            <p className="text-gray-500">로딩 중...</p>
+          </div>
+        ) : signups.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <p className="text-gray-500">대기 중인 가입 신청이 없습니다</p>
           </div>
@@ -128,6 +133,7 @@ function SignupManagementPage() {
                             setSelectedSignup(signup);
                             setShowApproveModal(true);
                           }}
+                          disabled={isApproving || isRejecting}
                         >
                           승인
                         </Button>
@@ -138,6 +144,7 @@ function SignupManagementPage() {
                             setSelectedSignup(signup);
                             setShowRejectModal(true);
                           }}
+                          disabled={isApproving || isRejecting}
                         >
                           반려
                         </Button>

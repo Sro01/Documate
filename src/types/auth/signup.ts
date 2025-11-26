@@ -48,8 +48,9 @@ export interface CheckUsernameResponseData {
 // 가입 신청 목록 조회 (GET /api/signup)
 // ============================================
 
-// API는 Signup 배열을 직접 반환
-export type SignupListResponseData = Signup[];
+export interface SignupListResponseData {
+  signups: Signup[];
+}
 
 // ============================================
 // 가입 신청 상세 조회 (GET /api/signup/{signup_id})
