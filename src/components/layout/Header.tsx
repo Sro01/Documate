@@ -12,7 +12,7 @@ function Header() {
     <header className="px-8 py-5 flex items-center justify-between">
       {/* 왼쪽: 로고 */}
       <div className="flex items-center">
-        <Logo />
+        <Logo clickable={true}/>
       </div>
 
       {/* 가운데: 페이지 타이틀 */}

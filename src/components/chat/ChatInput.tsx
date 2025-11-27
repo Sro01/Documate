@@ -22,6 +22,14 @@ function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
 
   useEffect(() => {
     loadChatbots();
+
+    // 인증 상태 변경 감지 (로그인/로그아웃 시 챗봇 목록 다시 로드)
+    const handleAuthChange = () => {
+      loadChatbots();
+    };
+
+    window.addEventListener('auth-change', handleAuthChange);
+    return () => window.removeEventListener('auth-change', handleAuthChange);
   }, []);
 
   useEffect(() => {

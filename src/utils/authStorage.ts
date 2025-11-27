@@ -112,6 +112,8 @@ export function clearAuthData(): void {
     removeAccessToken();
     removeAdminId();
     removeAdminName();
+    // 인증 상태 변경 이벤트 발생 (같은 탭에서도 감지 가능)
+    window.dispatchEvent(new CustomEvent('auth-change'));
     alert("로그아웃 되었습니다.");
   } catch (error) {
     console.error('인증 데이터 삭제 실패:', error);
