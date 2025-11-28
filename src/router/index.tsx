@@ -13,6 +13,7 @@ import ChatbotCreatePage from '../pages/admin/chatbot/ChatbotCreatePage';
 import ManualPage from '../pages/admin/manual/ManualPage';
 import SignupManagementPage from '../pages/admin/settings/SignupManagementPage';
 import ProfileSettingsPage from '../pages/admin/profile/ProfileSettingsPage';
+import StatsPage from '../pages/admin/stats/StatsPage';
 import ChatPage from '../pages/chat/ChatPage';
 
 // Public Routes: 인증이 필요 없는 라우트
@@ -93,6 +94,10 @@ export const protectedRoutes: RouteObject[] = [
       {
         path: "profile-settings",
         element: <ProfileSettingsPage />,
+      },
+      {
+        path: "stats",
+        element: <StatsPage />,
       },
     ],
   },

@@ -29,5 +29,6 @@ export const ROUTES = {
     SIGNUP_MANAGEMENT: '/admin/signup-management',
     ADMIN_LIST: '/admin/admins',
     SETTINGS: '/admin/profile-settings',
+    STATS: '/admin/stats',
   },
 } as const;

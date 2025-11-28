@@ -41,19 +41,11 @@ function AdminSidebarContent({ isCollapsed }: AdminSidebarContentProps) {
           <SubMenuItem label="챗봇 생성" onClick={() => navigate(ROUTES.ADMIN.CHATBOT_CREATE)} />
         </Dropdown>
 
-        <Dropdown
-          isCollapsed={isCollapsed}
-          trigger={
-            <NavItem
-              icon="📊"
-              label="챗봇 통계"
-              hasDropdown={true}
-            />
-          }
-        >
-          <SubMenuItem label="통계 대시보드" />
-          <SubMenuItem label="분석 리포트" />
-        </Dropdown>
+        <NavItem
+          icon="📊"
+          label="통계"
+          onClick={() => navigate(ROUTES.ADMIN.STATS)}
+        />
 
         <Dropdown
           isCollapsed={isCollapsed}

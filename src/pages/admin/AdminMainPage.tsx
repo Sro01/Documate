@@ -26,6 +26,9 @@ function AdminMainPage() {
         <Button className="rounded-full" onClick={() => navigate(ROUTES.ADMIN.SETTINGS)}>
           프로필 설정
         </Button>
+        <Button className="rounded-full" onClick={() => navigate(ROUTES.ADMIN.STATS)}>
+          통계
+        </Button>
       </div>
     </main>
   );
