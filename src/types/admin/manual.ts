@@ -35,8 +35,9 @@ export interface UploadManualFormData {
 // 문서 목록 조회 (GET /api/set/manuals?chatbot_id={chatbot_id})
 // ============================================
 
-// 배열 그대로 반환
-export type ManualListResponseData = Manual[];
+export interface ManualListResponseData {
+  manuals: Manual[];
+}
 
 // ============================================
 // 문서 삭제 (DELETE /api/set/manuals/{manual_id})

@@ -47,7 +47,7 @@ function ManualPage() {
     if (!chatbotId) return;
     const data = await getManuals(chatbotId);
     if (data) {
-      setManuals(data);
+      setManuals(data.manuals);
     }
   };
 
