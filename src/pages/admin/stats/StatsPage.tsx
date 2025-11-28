@@ -122,10 +122,10 @@ function StatsPage() {
         <DateRangeFilter value={dateRange} onChange={setDateRange} />
       </div>
       {/* 요약 카드 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <StatCard title="전체 질의 수" value={overviewStats.total_queries} />
-        <StatCard title="고유 사용자 수" value={overviewStats.unique_clients} />
-        <StatCard title="챗봇 수" value={overviewStats.by_chatbot.length} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <StatCard title="전체 질의 수" value={overviewStats.total_queries} icon="💬" color="blue" />
+        <StatCard title="고유 사용자 수" value={overviewStats.unique_clients} icon="👥" color="yellow" />
+        <StatCard title="챗봇 수" value={overviewStats.by_chatbot.length} icon="🤖" color="green" />
       </div>
 
       {/* 탭 네비게이션 */}
@@ -156,7 +156,7 @@ function StatsPage() {
           {selectedChatbotId && (
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                {chatbotStats?.chatbot_name || chatbotStats?.chatbot_id.slice(0, 8) || '선택된 챗봇'} - 날짜별 질의 추이
+                {chatbotStats?.chatbot_name || chatbotStats?.chatbot_id.slice(0, 8) || '선택된 챗봇'}
               </h3>
               {isChatbotLoading ? (
                 <div className="h-64 flex items-center justify-center">
