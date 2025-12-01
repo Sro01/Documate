@@ -10,14 +10,16 @@ interface ChatImagesRowProps {
 function ChatImagesRow({ images }: ChatImagesRowProps) {
   const [expandedImage, setExpandedImage] = useState<ChatImage | null>(null);
 
-  if (images.length === 0) return null;
+  const validImages = images.filter((img) => img.img_data && img.img_data.length > 0);
+
+  if (validImages.length === 0) return null;
 
   return (
     <div className="mb-3">
       {/* 이미지 썸네일 목록 */}
       <div className="overflow-x-auto pb-2">
         <div className="flex gap-3 w-fit">
-          {images.map((img) => (
+          {validImages.map((img) => (
             <ChatImageCard
               key={img.id}
               image={img}
