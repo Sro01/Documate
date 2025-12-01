@@ -27,6 +27,13 @@ function AdminSidebarContent({ isCollapsed }: AdminSidebarContentProps) {
       </div>
 
       <nav className="mt-4 flex-1">
+        <NavItem
+          icon="📌"
+          label="대시보드"
+          isCollapsed={isCollapsed}
+          onClick={() => navigate(ROUTES.ADMIN.MAIN)}
+        />
+
         <Dropdown
           isCollapsed={isCollapsed}
           collapsedNavigateTo={ROUTES.ADMIN.CHATBOT_LIST}
