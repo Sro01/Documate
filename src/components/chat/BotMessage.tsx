@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Bot } from 'lucide-react';
 import CopyButton from '../common/CopyButton';
-import ChatImageCard from './ChatImageCard';
+import ChatImagesRow from './ChatImagesRow';
 import BotMessageSkeleton from './BotMessageSkeleton';
 import type { ChatImage } from '../../types/chat/chat';
 
@@ -41,13 +41,7 @@ function BotMessage({ content, isLoading = false, chatbotName = 'DoQ-Mate', imag
         </div>
 
         {/* 이미지 표시 (이미지가 있을 때만) */}
-        {hasImages && (
-          <div className="flex flex-wrap gap-3 mb-3">
-            {images.map((img) => (
-              <ChatImageCard key={img.id} image={img} />
-            ))}
-          </div>
-        )}
+        {hasImages && <ChatImagesRow images={images} />}
 
         {/* 응답 내용 */}
         {content && (
