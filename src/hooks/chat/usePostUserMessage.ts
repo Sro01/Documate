@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { apiClient } from '../../api/client';
 import type { ChatResponse, ChatRequest } from '../../types/chat/chat';
+import type { ApiResponse } from '../../types/api';
 
 /**
  * 사용자 메시지를 전송하고 봇 응답을 받아오는 커스텀 훅
@@ -29,14 +30,18 @@ export function usePostUserMessage() {
     };
 
     try {
-      const response = await apiClient.post<ChatResponse>(
+      const response = await apiClient.post<ApiResponse<ChatResponse>>(
         '/chats',
         requestBody
       );
 
-      console.log('API 응답:', response.data);
-
-      return response.data;
+      if (response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        const errorMessage = response.data.error?.message || '메시지 전송에 실패했습니다.';
+        setError(errorMessage);
+        return null;
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
       setError(errorMessage);
