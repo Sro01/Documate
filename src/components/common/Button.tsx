@@ -51,7 +51,7 @@ function Button({
       focus:ring-gray-400
     `,
     red: `
-      bg-red-500 hover:bg-red-600 active:bg-red-700
+      bg-red-400 hover:bg-red-500 active:bg-red-600
       text-white shadow-sm hover:shadow
       focus:ring-red-500
     `,
