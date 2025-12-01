@@ -1,6 +1,32 @@
 import type { ChatHistory, Message } from '../types/chat/chat';
 
 const STORAGE_KEY = 'doqmate_chat_histories';
+const SELECTED_CHATBOT_KEY = 'doqmate_selected_chatbot';
+
+/**
+ * 선택된 챗봇을 로컬 스토리지에 저장합니다.
+ */
+export function saveSelectedChatbot(chatbot: { chatbot_id: string; name: string }): void {
+  try {
+    localStorage.setItem(SELECTED_CHATBOT_KEY, JSON.stringify(chatbot));
+  } catch (error) {
+    console.error('챗봇 선택 저장 실패:', error);
+  }
+}
+
+/**
+ * 로컬 스토리지에서 저장된 챗봇 선택을 가져옵니다.
+ */
+export function getSelectedChatbot(): { chatbot_id: string; name: string } | null {
+  try {
+    const stored = localStorage.getItem(SELECTED_CHATBOT_KEY);
+    if (!stored) return null;
+    return JSON.parse(stored);
+  } catch (error) {
+    console.error('챗봇 선택 로드 실패:', error);
+    return null;
+  }
+}
 
 /**
  * 로컬 스토리지에서 모든 채팅 기록을 가져옵니다.

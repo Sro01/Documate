@@ -108,7 +108,7 @@ function UserMessage({ content, onEdit }: UserMessageProps) {
         <div
           ref={bubbleRef}
           className="bg-blue-50 text-gray-800 px-4 py-3 rounded-2xl max-w-2xl"
-          style={isEditing && bubbleWidth ? { width: `${bubbleWidth}px` } : undefined}
+          style={isEditing ? { minWidth: '200px', width: bubbleWidth ? `${bubbleWidth}px` : undefined } : undefined}
         >
           {isEditing ? (
             <>

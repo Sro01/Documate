@@ -3,13 +3,14 @@ import { Send, ChevronDown } from 'lucide-react';
 import type { Chatbot } from '../../types/admin/chatbot';
 import { useGetChatbots } from '../../hooks/chatbot/useChatbot';
 import { getAccessToken } from '../../utils/authStorage';
+import { saveSelectedChatbot, getSelectedChatbot } from '../../utils/chatStorage';
 
 interface ChatInputProps {
   onSendMessage: (message: string, chatbotId: string) => void;
-  disabled?: boolean;
+  isSendDisabled?: boolean;
 }
 
-function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
+function ChatInput({ onSendMessage, isSendDisabled = false }: ChatInputProps) {
   const [message, setMessage] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -53,9 +54,13 @@ function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
 
       setChatbots(filteredChatbots);
 
-      // 기본 선택: 첫 번째 챗봇
+      // 저장된 챗봇 선택 복원 또는 첫 번째 챗봇 선택
       if (filteredChatbots.length > 0) {
-        setSelectedChatbot(filteredChatbots[0]);
+        const savedChatbot = getSelectedChatbot();
+        const restoredChatbot = savedChatbot
+          ? filteredChatbots.find(c => c.chatbot_id === savedChatbot.chatbot_id)
+          : null;
+        setSelectedChatbot(restoredChatbot || filteredChatbots[0]);
       }
     } else {
       setChatbots([]);
@@ -65,7 +70,7 @@ function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   };
 
   const handleSubmit = () => {
-    if (!message.trim() || !selectedChatbot || disabled) return;
+    if (!message.trim() || !selectedChatbot || isSendDisabled) return;
 
     onSendMessage(message.trim(), selectedChatbot.chatbot_id);
     setMessage('');
@@ -93,9 +98,8 @@ function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask DoQ-Mate"
-            disabled={disabled}
             rows={1}
-            className="w-full px-6 pt-5 pb-4 bg-transparent resize-none outline-none text-gray-800 placeholder-gray-400 disabled:opacity-50"
+            className="w-full px-6 pt-5 pb-4 bg-transparent resize-none outline-none text-gray-800 placeholder-gray-400"
             style={{ maxHeight: '200px' }}
           />
 
@@ -104,7 +108,7 @@ function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-200 rounded-2xl transition-colors disabled:opacity-50"
-                disabled={disabled || isLoading}
+                disabled={isLoading}
               >
                 <span>
                   {isLoading ? '로딩 중...' : (selectedChatbot ? selectedChatbot.name : '챗봇 선택')}
@@ -125,6 +129,7 @@ function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
                           key={chatbot.chatbot_id}
                           onClick={() => {
                             setSelectedChatbot(chatbot);
+                            saveSelectedChatbot({ chatbot_id: chatbot.chatbot_id, name: chatbot.name });
                             setIsDropdownOpen(false);
                           }}
                           className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors ${
@@ -149,7 +154,7 @@ function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
 
             <button
               onClick={handleSubmit}
-              disabled={disabled || !message.trim() || !selectedChatbot}
+              disabled={isSendDisabled || !message.trim() || !selectedChatbot}
               className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               aria-label="Send message"
             >

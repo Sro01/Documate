@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Bot } from 'lucide-react';
 import CopyButton from '../common/CopyButton';
+import type { ChatImage } from '../../types/chat/chat';
 
 interface BotMessageProps {
   content?: string;
   isLoading?: boolean;
   chatbotName?: string;
+  images?: ChatImage[];
 }
 
-function BotMessage({ content, isLoading = false, chatbotName = 'DoQ-Mate' }: BotMessageProps) {
+function BotMessage({ content, isLoading = false, chatbotName = 'DoQ-Mate', images }: BotMessageProps) {
   const [isHovered, setIsHovered] = useState(false);
   const hasContent = !isLoading && content;
 
@@ -65,6 +67,21 @@ function BotMessage({ content, isLoading = false, chatbotName = 'DoQ-Mate' }: Bo
         <div className="text-sm font-semibold text-gray-700 mb-2">
           {chatbotName}
         </div>
+
+        {/* 이미지 표시 */}
+        {images && images.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {images.map((img) => (
+              <img
+                key={img.id}
+                src={`data:${img.mime_type};base64,${img.data}`}
+                alt={img.description || ''}
+                className="h-24 sm:h-32 md:h-40 rounded-lg object-contain border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => window.open(`data:${img.mime_type};base64,${img.data}`, '_blank')}
+              />
+            ))}
+          </div>
+        )}
 
         {/* 응답 상태 또는 내용 */}
         {isLoading ? (

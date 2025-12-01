@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Message } from '../../types/chat/chat';
+import type { Message, ChatImage } from '../../types/chat/chat';
 import {
   getChatHistory,
   addMessageToSession,
@@ -86,12 +86,14 @@ export function useChatMessages({ sessionId, onMessagesChange }: UseChatMessages
   /**
    * 봇 응답 추가 (로컬에만 저장)
    */
-  const addBotResponse = useCallback((content: string) => {
+  const addBotResponse = useCallback((content: string, chatbotName?: string, images?: ChatImage[]) => {
     if (!sessionId) return;
 
     const botMessage: Message = {
       role: 'assistant',
       content,
+      chatbot_name: chatbotName,
+      images,
     };
 
     addMessage(botMessage);
@@ -115,6 +117,31 @@ export function useChatMessages({ sessionId, onMessagesChange }: UseChatMessages
       onMessagesChange?.();
     }
   }, [sessionId, messages, onMessagesChange]);
+
+  /**
+   * 특정 위치의 봇 응답을 업데이트
+   */
+  const updateBotResponseAt = useCallback((index: number, content: string, chatbotName?: string, images?: ChatImage[]) => {
+    if (!sessionId || index < 0) return;
+
+    // localStorage에서 최신 세션 데이터 가져오기
+    const session = getChatHistory(sessionId);
+    if (!session || index >= session.messages.length) return;
+
+    const updatedMessages = [...session.messages];
+    updatedMessages[index] = {
+      ...updatedMessages[index],
+      content,
+      chatbot_name: chatbotName,
+      images,
+    };
+
+    const updatedSession = updateSessionMessages(sessionId, updatedMessages);
+    if (updatedSession) {
+      setMessages(updatedSession.messages);
+      onMessagesChange?.();
+    }
+  }, [sessionId, onMessagesChange]);
 
   /**
    * 메시지 삭제
@@ -151,6 +178,7 @@ export function useChatMessages({ sessionId, onMessagesChange }: UseChatMessages
     sendUserMessage,
     addBotResponse,
     editMessage,
+    updateBotResponseAt,
     deleteMessage,
     clearMessages,
   };

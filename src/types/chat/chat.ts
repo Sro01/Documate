@@ -1,13 +1,8 @@
-export interface Message {
-  role: 'user' | 'admin' | 'assistant';
-  content: string;
-  is_first?: boolean;
-}
-
-export interface ChatRequest {
-  chatbot_id: string;
-  session_id: string;
-  messages: Message[];
+export interface ChatImage {
+  id: string;
+  mime_type: string;
+  data: string;  // Base64
+  description?: string;
 }
 
 export interface SupportingChunk {
@@ -22,12 +17,27 @@ export interface SupportingChunk {
 
 export type UncertaintyLevel = 'low' | 'medium' | 'high';
 
+export interface Message {
+  role: 'user' | 'admin' | 'assistant';
+  content: string;
+  is_first?: boolean;
+  chatbot_name?: string;
+  images?: ChatImage[];
+}
+
+export interface ChatRequest {
+  chatbot_id: string;
+  session_id: string;
+  messages: Message[];
+}
+
 export interface ChatResponse {
+  chatbot_name: string;
   answer: string;
-  log_id: string;
-  // supporting_chunks: SupportingChunk[];
-  // uncertainty: UncertaintyLevel;
-  // suggested_title?: string;
+  images?: ChatImage[];
+  supporting_chunks?: SupportingChunk[];
+  uncertainty?: UncertaintyLevel;
+  suggested_title?: string;
 }
 
 export interface ChatItem {

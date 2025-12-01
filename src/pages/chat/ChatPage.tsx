@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useChatContext } from '../../contexts/ChatContext';
 import { useChatMessages } from '../../hooks/chat/useChatMessages';
@@ -8,7 +8,7 @@ import UserMessage from '../../components/chat/UserMessage';
 import BotMessage from '../../components/chat/BotMessage';
 import WelcomeTitle from '../../components/common/WelcomeTitle';
 import { ROUTES } from '../../constants/routes';
-import { addMessageToSession } from '../../utils/chatStorage';
+import { addMessageToSession, getSelectedChatbot } from '../../utils/chatStorage';
 import type { Message } from '../../types/chat/chat';
 
 function ChatPage() {
@@ -17,6 +17,7 @@ function ChatPage() {
   const { currentSessionId, createNewChat, selectChat, clearCurrentSession, refreshChatHistories } = useChatContext();
   const { postUserMessage } = usePostUserMessage();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [editingBotIndex, setEditingBotIndex] = useState<number | null>(null);
 
   // URL의 sessionId와 현재 선택된 세션 동기화
   useEffect(() => {
@@ -39,6 +40,7 @@ function ChatPage() {
     sendUserMessage,
     addBotResponse,
     editMessage,
+    updateBotResponseAt,
     isLoading,
     setIsLoading,
   } = useChatMessages({ sessionId: currentSessionId, onMessagesChange: refreshChatHistories });
@@ -64,13 +66,14 @@ function ChatPage() {
       // URL을 새 세션 ID로 업데이트 (replace: true로 히스토리 중복 방지)
       navigate(ROUTES.CHAT(newSessionId), { replace: true });
 
-      // 실제 API 호출
       setIsLoading(true);
-      const botAnswer = await postUserMessage(message, chatbotId, newSessionId);
-      if (botAnswer) {
+      const response = await postUserMessage(message, chatbotId, newSessionId);
+      if (response) {
         addMessageToSession(newSessionId, {
           role: 'assistant',
-          content: botAnswer,
+          content: response.answer,
+          chatbot_name: response.chatbot_name,
+          images: response.images,
         });
       }
       setIsLoading(false);
@@ -80,17 +83,40 @@ function ChatPage() {
     // 기존 세션에 메시지 전송
     sendUserMessage(message);
 
-    // 실제 API 호출
     setIsLoading(true);
-    const botAnswer = await postUserMessage(message, chatbotId, currentSessionId);
-    if (botAnswer) {
-      addBotResponse(botAnswer);
+    const response = await postUserMessage(message, chatbotId, currentSessionId);
+    if (response) {
+      addBotResponse(response.answer, response.chatbot_name, response.images);
     }
     setIsLoading(false);
   };
 
-  const handleEditMessage = (index: number, newContent: string) => {
+  const handleEditMessage = async (index: number, newContent: string) => {
+    if (!currentSessionId) return;
+
+    // 1. 사용자 메시지 수정
     editMessage(index, newContent);
+
+    // 2. 다음 메시지가 봇 응답인지 확인
+    const botResponseIndex = index + 1;
+    if (botResponseIndex < messages.length && messages[botResponseIndex].role === 'assistant') {
+      // 3. 현재 선택된 챗봇 ID 가져오기
+      const selectedChatbot = getSelectedChatbot();
+      if (!selectedChatbot) return;
+
+      // 4. 해당 봇 응답을 로딩 상태로 전환
+      setEditingBotIndex(botResponseIndex);
+
+      // 5. API 재호출
+      const response = await postUserMessage(newContent, selectedChatbot.chatbot_id, currentSessionId);
+
+      // 6. 봇 응답 업데이트
+      if (response) {
+        updateBotResponseAt(botResponseIndex, response.answer, response.chatbot_name, response.images);
+      }
+
+      setEditingBotIndex(null);
+    }
   };
 
   const hasMessages = messages.length > 0;
@@ -113,14 +139,16 @@ function ChatPage() {
                   <BotMessage
                     key={index}
                     content={msg.content}
-                    chatbotName="DoQ-Mate"
+                    chatbotName={msg.chatbot_name}
+                    images={msg.images}
+                    isLoading={editingBotIndex === index}
                   />
                 )
               ))}
-              {isLoading && (
+              {isLoading && editingBotIndex === null && (
                 <BotMessage
-                  content="..."
-                  chatbotName="DoQ-Mate"
+                  isLoading={true}
+                  chatbotName={getSelectedChatbot()?.name}
                 />
               )}
               {/* 스크롤 타겟 */}
@@ -130,7 +158,7 @@ function ChatPage() {
           <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
             <div className="h-16 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
             <div className="pointer-events-auto">
-              <ChatInput onSendMessage={handleSendMessage} />
+              <ChatInput onSendMessage={handleSendMessage} isSendDisabled={isLoading} />
             </div>
           </div>
         </>

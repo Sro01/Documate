@@ -13,7 +13,7 @@ export function usePostUserMessage() {
     question: string,
     chatbotId: string,
     sessionId: string
-  ): Promise<string | null> => {
+  ): Promise<ChatResponse | null> => {
     setIsLoading(true);
     setError(null);
 
@@ -36,7 +36,7 @@ export function usePostUserMessage() {
 
       console.log('API 응답:', response.data);
 
-      return response.data.answer;
+      return response.data;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
       setError(errorMessage);
