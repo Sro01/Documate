@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Settings, PencilLine, Trash2 } from 'lucide-react';
+import { Settings, PencilLine, Trash2, Plus } from 'lucide-react';
 import Button from '../../../components/common/Button';
 import ChatbotTable from '../../../components/admin/chatbot/ChatbotList/ChatbotTable';
 import ManualFileList from '../../../components/admin/manual/ManualFileList';
@@ -332,6 +332,7 @@ function ManualPage() {
           <Button
             variant="outline"
             onClick={() => fileInputRef.current?.click()}
+            icon={<Plus size={20} />}
           >
             pdf 추가
           </Button>

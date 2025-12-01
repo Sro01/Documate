@@ -5,6 +5,7 @@ import { Table } from '../../../common/Table';
 import type { TableColumn } from '../../../common/Table';
 import ToggleSwitch from '../../../common/ToggleSwitch';
 import Modal from '../../../common/Modal';
+import Tooltip from '../../../common/Tooltip';
 import { useChatbotListContext } from '../../../../contexts/ChatbotListContext';
 
 interface ChatbotTableProps {
@@ -45,7 +46,7 @@ function ChatbotTable({ chatbots }: ChatbotTableProps) {
     {
       key: 'index',
       label: 'ID',
-      width: 'w-20',
+      width: 'w-16',
       align: 'center',
       render: (_, __, index) => (
         <span className="text-gray-600 font-medium">{index + 1}</span>
@@ -54,29 +55,27 @@ function ChatbotTable({ chatbots }: ChatbotTableProps) {
     {
       key: 'name',
       label: '챗봇 명칭',
-      width: 'w-48',
+      width: 'w-56',
       align: 'center',
       render: (value, row) => (
-        <span
-          className="text-gray-800 font-semibold max-w-[150px] truncate block mx-auto"
-          title={row.name}
-        >
-          {value as string}
-        </span>
+        <Tooltip content={row.name} position="bottom" onlyWhenTruncated>
+          <span className="text-gray-800 font-semibold max-w-[200px] truncate block mx-auto">
+            {value as string}
+          </span>
+        </Tooltip>
       ),
     },
     {
       key: 'tag',
       label: '태그',
-      width: 'w-32',
+      width: 'w-24',
       align: 'center',
       render: (value, row) => (
-        <span
-          className="text-gray-600 max-w-[100px] truncate block mx-auto"
-          title={row.tag || ''}
-        >
-          {(value as string) || <span className="text-gray-400">-</span>}
-        </span>
+        <Tooltip content={row.tag || ''} position="bottom" onlyWhenTruncated>
+          <span className="text-gray-600 max-w-[80px] truncate block mx-auto">
+            {(value as string) || <span className="text-gray-400">-</span>}
+          </span>
+        </Tooltip>
       ),
     },
     {
@@ -84,12 +83,11 @@ function ChatbotTable({ chatbots }: ChatbotTableProps) {
       label: '설명',
       align: 'center',
       render: (value, row) => (
-        <span
-          className="text-gray-600 max-w-[200px] truncate block mx-auto"
-          title={row.description || ''}
-        >
-          {(value as string) || <span className="text-gray-400">-</span>}
-        </span>
+        <Tooltip content={row.description || ''} position="bottom" onlyWhenTruncated>
+          <span className="text-gray-600 max-w-[200px] truncate block mx-auto">
+            {(value as string) || <span className="text-gray-400">-</span>}
+          </span>
+        </Tooltip>
       ),
     },
     {
@@ -108,7 +106,8 @@ function ChatbotTable({ chatbots }: ChatbotTableProps) {
             disabled={isUpdating}
           />
           <span
-            className={`w-12 text-left ${row.is_public ? 'text-green-600' : 'text-gray-500'} ${isUpdating ? 'opacity-50' : ''}`}
+            className={`w-14 text-left truncate ${row.is_public ? 'text-green-600' : 'text-gray-500'} ${isUpdating ? 'opacity-50' : ''}`}
+            title={isUpdating ? '처리중...' : row.is_public ? '공개' : '비공개'}
           >
             {isUpdating ? '처리중...' : row.is_public ? '공개' : '비공개'}
           </span>
